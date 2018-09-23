@@ -1,9 +1,16 @@
 import originJsonp from 'jsonp';
 
-export default function jsonp (url, data, option) {
-    url += (url.indexOf('?') < 0 ? '?' : '&') + param(data);
+export default function jsonp (url, params, opts) {
+    console.log('url', url);
+    console.log('data', params);
+    console.log('option', opts);
+    url += (url && url.indexOf('?') < 0 ? '?' : '&') + param(params);
     return new Promise((resolve, reject) => {
-        originJsonp(url, option, (err, data) => {
+        originJsonp(url, opts, (err, data) => {
+            console.log('PromiseUrl', url);
+            console.log('PromiseOption', opts);
+            console.log('PromiseErr', err);
+            console.log('PromiseData', data);
             if (!err) {
                 resolve(data);
             } else {

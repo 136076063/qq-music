@@ -1,6 +1,7 @@
 <template>
     <div class="recommend">
         <div class="recommend-content">
+            <Slider  v-if="sliderData.length" :sliderData="sliderData"></Slider>
             <div class="recommend-list">
                 <h1 class="list-title">热门歌单推荐</h1>
             </div>
@@ -9,17 +10,53 @@
 </template>
 
 <script>
+    import Slider from 'base/slider';
     import { getRecommend } from 'api/recommend';
+    import urls from 'api/urls.js';
     export default {
+        data () {
+            return {
+                recommendData: []
+            };
+        },
         created () {
             this.createdGetRecommend();
         },
+        computed: {
+            sliderData () {
+                return (this.recommendData && this.recommendData.slider) || [];
+            }
+        },
         methods: {
+            toLink (url) {
+                document.location.href = url;
+            },
             createdGetRecommend () {
-                getRecommend().then(function (res) {
-                    console.error(res);
+                let self = this;
+                getRecommend({
+                    url: urls.getRecommend,
+                    ops: {
+                        platform: 'h5',
+                        uin: 0,
+                        needNewCode: 1,
+                        g_tk: 1928093487,
+                        inCharset: 'utf-8',
+                        outCharset: 'utf-8',
+                        notice: 0,
+                        format: 'jsonp'
+                    },
+                    opts: {
+                        param: 'jsonpCallback'
+                    }
+                }).then((res) => {
+                    if (res.code === 0) {
+                        self.recommendData = res && res.data;
+                    }
                 });
             }
+        },
+        components: {
+            Slider
         }
     };
 </script>
@@ -35,10 +72,6 @@
         .recommend-content
             height: 100%
             overflow: hidden
-            .slider-wrapper
-                position: relative
-                width: 100%
-                overflow: hidden
             .recommend-list
                 .list-title
                     height: 65px
