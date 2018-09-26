@@ -4,6 +4,15 @@
             <Slider  v-if="sliderData.length" :sliderData="sliderData"></Slider>
             <div class="recommend-list">
                 <h1 class="list-title">热门歌单推荐</h1>
+                <ul>
+                    <li class="item" v-for="item in ListData">
+                        <div class="icon"><img :src="item.picurl" :alt="item.listennum"></div>
+                        <div class="text">
+                            <div class="name">{{item.mvtitle}}</div>
+                            <div class="dese">{{item.mvdesc}}</div>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -11,25 +20,52 @@
 
 <script>
     import Slider from 'base/slider';
-    import { getRecommend } from 'api/recommend';
+    import { getRecommend, recommendList } from 'api/recommend';
     import urls from 'api/urls.js';
     export default {
         data () {
             return {
-                recommendData: []
+                recommendBanner: [],
+                recommendList: []
             };
         },
         created () {
+            // banner数据
             this.createdGetRecommend();
+            // 歌单list
+            this.createdRecommendList();
         },
         computed: {
             sliderData () {
-                return (this.recommendData && this.recommendData.slider) || [];
+                return (this.recommendBanner && this.recommendBanner.slider) || [];
+            },
+            ListData () {
+                return (this.recommendList && this.recommendList.mvlist) || [];
             }
         },
         methods: {
-            toLink (url) {
-                document.location.href = url;
+            createdRecommendList () {
+                recommendList({
+                    url: '/api/recommendList',
+                    ops: {
+                        g_tk: 5381,
+                        jsonpCallback: 'MusicJsonCallback',
+                        loginUin: 0,
+                        hostUin: 0,
+                        format: 'json',
+                        inCharset: 'utf8',
+                        outCharset: 'GB2312',
+                        notice: 0,
+                        platform: 'yqq',
+                        needNewCode: 0,
+                        cmd: 'shoubo',
+                        lan: 'all'
+                    }
+                }).then((res) => {
+                    if (res && res.status === 200) {
+                        this.recommendList = (res && res.data) || {};
+                    }
+                });
             },
             createdGetRecommend () {
                 let self = this;
@@ -49,8 +85,8 @@
                         param: 'jsonpCallback'
                     }
                 }).then((res) => {
-                    if (res.code === 0) {
-                        self.recommendData = res && res.data;
+                    if (res.code === urls.ERR_OK) {
+                        self.recommendBanner = res && res.data;
                     }
                 });
             }
@@ -88,6 +124,9 @@
                         flex: 0 0 60px
                         width: 60px
                         padding-right: 20px
+                        img
+                            width: 60px;
+                            height: 60px;
                     .text
                         display: flex
                         flex-direction: column

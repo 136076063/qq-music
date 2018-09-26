@@ -2,7 +2,7 @@
     <section>
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="item in sliderData" @click="toLink(item.linkUrl)">
+                <div class="swiper-slide" v-for="item in sliderData" :data-Lick="item.linkUrl">
                     <img :src="item.picUrl" :alt="item.id">
                 </div>
             </div>
@@ -26,8 +26,14 @@
                     loop: true,
                     autoplay: 3000,
                     speed: 1000,
-                    autoplayDisableOnInteraction: false
+                    autoplayDisableOnInteraction: false,
+                    onClick (swiper) {
+                        window.location.href = swiper.clickedSlide.dataset.lick;
+                    }
                 });
+            });
+            window.addEventListener('resize', () => {
+                console.log('视口宽度-------:', window.innerWidth);
             });
         },
         methods: {
@@ -36,22 +42,11 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-    @import "~common/stylus/variable"
     @import '~swiper/dist/css/swiper.min.css';
+    @import "~common/stylus/variable"
+
     .swiper-container
         min-height: 1px
         img
             width: 100%
-        .swiper-pagination-bullet
-            display: inline-block
-            margin: 0 4px
-            width: 8px
-            height: 8px
-            border-radius: 50%
-            background: $color-text-l
-            &.swiper-pagination-bullet-active
-                width: 20px
-                border-radius: 5px
-                background: $color-text-ll
-
 </style>
