@@ -5,7 +5,7 @@
             <div class="recommend-list">
                 <h1 class="list-title">热门歌单推荐</h1>
                 <ul>
-                    <li class="item" v-for="item in ListData">
+                    <li class="item" v-for="(item, index) in ListData" :key="index">
                         <div class="icon"><img :src="item.picurl" :alt="item.listennum"></div>
                         <div class="text">
                             <div class="name">{{item.mvtitle}}</div>
@@ -62,8 +62,8 @@
                         lan: 'all'
                     }
                 }).then((res) => {
-                    if (res && res.status === 200) {
-                        this.recommendList = (res && res.data) || {};
+                    if (res && res.data && res.data.code === urls.ERR_OK) {
+                        this.recommendList = (res && res.data && res.data.data) || {};
                     }
                 });
             },

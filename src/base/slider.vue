@@ -2,7 +2,7 @@
     <section>
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="item in sliderData" :data-Lick="item.linkUrl">
+                <div class="swiper-slide" v-for="(item, index) in sliderData" :data-Lick="item.linkUrl" :key="index">
                     <img :src="item.picUrl" :alt="item.id">
                 </div>
             </div>
