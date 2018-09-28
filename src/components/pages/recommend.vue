@@ -1,25 +1,28 @@
 <template>
     <div class="recommend">
-        <div class="recommend-content">
-            <Slider  v-if="sliderData.length" :sliderData="sliderData"></Slider>
-            <div class="recommend-list">
-                <h1 class="list-title">热门歌单推荐</h1>
-                <ul>
-                    <li class="item" v-for="(item, index) in ListData" :key="index">
-                        <div class="icon"><img :src="item.picurl" :alt="item.listennum"></div>
-                        <div class="text">
-                            <div class="name">{{item.mvtitle}}</div>
-                            <div class="dese">{{item.mvdesc}}</div>
-                        </div>
-                    </li>
-                </ul>
+        <Scrool class="recommend-content" :data="ListData">
+            <div>
+                <Slider  v-if="sliderData.length" :sliderData="sliderData"></Slider>
+                <div class="recommend-list">
+                    <h1 class="list-title">热门歌单推荐</h1>
+                    <ul>
+                        <li class="item" v-for="(item, index) in ListData" :key="index">
+                            <div class="icon"><img :src="item.picurl" :alt="item.listennum"></div>
+                            <div class="text">
+                                <div class="name">{{item.mvtitle}}</div>
+                                <div class="dese">{{item.mvdesc}}</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        </Scrool>
     </div>
 </template>
 
 <script>
     import Slider from 'base/slider';
+    import Scrool from 'base/scroll';
     import { getRecommend, recommendList } from 'api/recommend';
     import urls from 'api/urls.js';
     export default {
@@ -92,7 +95,8 @@
             }
         },
         components: {
-            Slider
+            Slider,
+            Scrool
         }
     };
 </script>

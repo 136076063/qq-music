@@ -22,10 +22,6 @@ module.exports = {
       2,
       4
     ],
-    "linebreak-style": [
-      2,
-      "unix"
-    ],
     "quotes": [
       2,
       "single"
@@ -43,6 +39,7 @@ module.exports = {
     ],
     "camelcase": [
       0
-    ]
+    ],
+    'linebreak-style': 0
   }
 }
