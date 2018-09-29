@@ -16,6 +16,9 @@
                     </ul>
                 </div>
             </div>
+            <div class="loading-container" v-if="!ListData.length">
+                <loading></loading>
+            </div>
         </Scroll>
     </div>
 </template>
@@ -23,6 +26,7 @@
 <script>
     import Slider from 'base/slider';
     import Scroll from 'base/scroll';
+    import loading from 'base/loading';
     import { getRecommend, recommendList } from 'api/recommend';
     import urls from 'api/urls.js';
     export default {
@@ -104,7 +108,8 @@
         },
         components: {
             Slider,
-            Scroll
+            Scroll,
+            loading
         }
     };
 </script>
