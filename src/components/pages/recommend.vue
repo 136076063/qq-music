@@ -1,13 +1,13 @@
 <template>
     <div class="recommend">
-        <Scrool class="recommend-content" :data="ListData">
+        <Scroll ref="recScroll" class="recommend-content" :data="ListData">
             <div>
-                <Slider  v-if="sliderData.length" :sliderData="sliderData"></Slider>
+                <Slider @srcollRefresh="srcollRefresh" v-if="sliderData.length" :sliderData="sliderData"></Slider>
                 <div class="recommend-list">
                     <h1 class="list-title">热门歌单推荐</h1>
                     <ul>
-                        <li class="item" v-for="(item, index) in ListData" :key="index">
-                            <div class="icon"><img :src="item.picurl" :alt="item.listennum"></div>
+                        <li class="item" v-for="item in ListData">
+                            <div class="icon"><img v-lazy="item.picurl" :alt="item.listennum"></div>
                             <div class="text">
                                 <div class="name">{{item.mvtitle}}</div>
                                 <div class="dese">{{item.mvdesc}}</div>
@@ -16,20 +16,21 @@
                     </ul>
                 </div>
             </div>
-        </Scrool>
+        </Scroll>
     </div>
 </template>
 
 <script>
     import Slider from 'base/slider';
-    import Scrool from 'base/scroll';
+    import Scroll from 'base/scroll';
     import { getRecommend, recommendList } from 'api/recommend';
     import urls from 'api/urls.js';
     export default {
         data () {
             return {
                 recommendBanner: [],
-                recommendList: []
+                recommendList: [],
+                checkloaded: false
             };
         },
         created () {
@@ -47,6 +48,13 @@
             }
         },
         methods: {
+            // swiper图片加载完成之后，重新计算better-scroll高度
+            srcollRefresh () {
+                if (!this.checkloaded) {
+                    this.$refs.recScroll.refresh();
+                    this.checkloaded = true;
+                }
+            },
             createdRecommendList () {
                 recommendList({
                     url: '/api/recommendList',
@@ -65,7 +73,7 @@
                         lan: 'all'
                     }
                 }).then((res) => {
-                    if (res && res.data && res.data.code === urls.ERR_OK) {
+                    if (res && res.data && res.data.code === 0) {
                         this.recommendList = (res && res.data && res.data.data) || {};
                     }
                 });
@@ -96,7 +104,7 @@
         },
         components: {
             Slider,
-            Scrool
+            Scroll
         }
     };
 </script>

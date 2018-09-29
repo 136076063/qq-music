@@ -2,8 +2,8 @@
     <section>
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="(item, index) in sliderData" :data-Lick="item.linkUrl" :key="index">
-                    <img :src="item.picUrl" :alt="item.id">
+                <div class="swiper-slide" v-for="item in sliderData" :data-Lick="item.linkUrl">
+                    <img :src="item.picUrl" @load="loadImage" :alt="item.id">
                 </div>
             </div>
             <div class="swiper-pagination"></div>
@@ -37,6 +37,10 @@
             });
         },
         methods: {
+            loadImage () {
+                // 调用父组件方法，重新计算滚动容器的高度
+                this.$emit('srcollRefresh');
+            }
         }
     };
 </script>
