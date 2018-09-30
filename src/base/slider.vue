@@ -2,7 +2,7 @@
     <section>
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="item in sliderData" :data-Lick="item.linkUrl">
+                <div class="swiper-slide" v-for="(item, index) in sliderData" :data-Lick="item.linkUrl" :key="index">
                     <img :src="item.picUrl" @load="loadImage" :alt="item.id">
                 </div>
             </div>
@@ -12,7 +12,6 @@
 </template>
 <script type="text/ecmascript-6">
     import Swiper from 'swiper';
-    import 'swiper/dist/css/swiper.min.css';
     export default {
         props: {
             sliderData: {

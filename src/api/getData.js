@@ -1,10 +1,10 @@
 import Jsonp from 'common/js/jsonp';
 import axios from 'axios';
-export function getRecommend (params) {
+export function getJsonp (params) {
     return Jsonp(params && params.url, params && params.ops, params && params.opts);
 }
 
-export function recommendList (params) {
+export function getAxios (params) {
     return axios.get(params && params.url, {
         params: params && params.ops
     }).then((res) => {

@@ -27,7 +27,7 @@
     import Slider from 'base/slider';
     import Scroll from 'base/scroll';
     import loading from 'base/loading';
-    import { getRecommend, recommendList } from 'api/recommend';
+    import { getJsonp, getAxios } from 'api/getData';
     import urls from 'api/urls.js';
     export default {
         data () {
@@ -60,7 +60,7 @@
                 }
             },
             createdRecommendList () {
-                recommendList({
+                getAxios({
                     url: '/api/recommendList',
                     ops: {
                         g_tk: 5381,
@@ -84,7 +84,7 @@
             },
             createdGetRecommend () {
                 let self = this;
-                getRecommend({
+                getJsonp({
                     url: urls.getRecommend,
                     ops: {
                         platform: 'h5',
