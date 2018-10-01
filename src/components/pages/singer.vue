@@ -1,15 +1,17 @@
 <template>
     <div class="singer">
+        <ListView :data="singerInfo"></ListView>
     </div>
 </template>
 <script>
     import { getJsonp } from 'api/getData';
     import urls from 'api/urls';
     import Singer from 'common/js/singer';
+    import ListView from 'base/ListView';
     export default {
         data () {
             return {
-                singerInfo: ''
+                singerInfo: []
             };
         },
         created () {
@@ -93,6 +95,9 @@
                 console.error(hot.concat(arr));
                 return hot.concat(arr);
             }
+        },
+        components: {
+            ListView
         }
     };
 </script>
