@@ -21,11 +21,15 @@
         <div class="list-fixed" v-if="fixedTitle" ref="listFixed">
             <div class="fixed-title">{{fixedTitle.title}}</div>
         </div>
+        <div class="loading-container" v-if="!singerInfo.length">
+            <loading></loading>
+        </div>
     </scroll>
 </template>
 
 <script>
     import scroll from 'base/scroll';
+    import loading from 'base/loading';
     export default {
         data () {
             return {
@@ -126,7 +130,8 @@
             }
         },
         components: {
-            scroll
+            scroll,
+            loading
         }
     };
 </script>
