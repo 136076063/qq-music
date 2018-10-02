@@ -1,7 +1,13 @@
 <template>
-    <scroll class="listview" :data="data" ref="listviewScroll">
+    <scroll :data="singerInfo"
+            class="listview"
+            ref="listviewScroll"
+            :listenScroll="betterScroll.listenScroll"
+            :probeType="betterScroll.probeType"
+            @scroll="scrollClick"
+    >
         <div>
-            <div class="list-group" v-for="(items, index) in data" :key="index" ref="listviewList">
+            <div class="list-group" v-for="(items, index) in singerInfo" :key="index" ref="listviewList">
                 <div class="list-group-title">{{items.title}}</div>
                 <div class="list-group-item" v-for="(sunItem, subIndex) in items.lists" :key="subIndex">
                     <img class="avatar" v-lazy="sunItem.picUrl" />
@@ -10,7 +16,10 @@
             </div>
         </div>
         <div class="list-shortcut" @touchstart.stop.prevent="touchstart" @touchmove.stop.prevent="touchmove">
-            <div class="item" v-for="(item, index) in data" :data-index="index" :key="index">{{index === 0 ? item.title.substr(0, 1) : item.title}}</div>
+            <div class="item" :class="{'current': swiperscrollIndex === index}" v-for="(item, index) in singerInfo" :data-index="index" :key="index">{{index === 0 ? item.title.substr(0, 1) : item.title}}</div>
+        </div>
+        <div class="list-fixed" v-if="fixedTitle" ref="listFixed">
+            <div class="fixed-title">{{fixedTitle.title}}</div>
         </div>
     </scroll>
 </template>
@@ -20,13 +29,29 @@
     export default {
         data () {
             return {
-                tonchInfo: {}
+                tonchInfo: {}, // 手指触碰时初始化tonch参数
+                betterScroll: { // 初始化better-scroll参数
+                    listenScroll: true,
+                    probeType: 3
+                },
+                heightList: [], // 列表每个组的高度范围值
+                swiperscrollIndex: 0, // 列表滑动的索引值
+                scrollPageY: 0, // 列表滚动的距离
+                scrollDiffY: 0 // 列表每个组距离顶部的距离
             };
         },
         props: {
-            data: {
+            singerInfo: {
                 type: Array,
                 default: []
+            }
+        },
+        computed: {
+            fixedTitle () {
+                if (this.scrollPageY >= 0) {
+                    return '';
+                }
+                return this.singerInfo[this.swiperscrollIndex] ? this.singerInfo[this.swiperscrollIndex] : '';
             }
         },
         methods: {
@@ -43,12 +68,61 @@
                 // 取得移动了几个索引 然后加上初始索引
                 let moveIndex = parseInt(this.tonchInfo.focuIndex) + ((this.tonchInfo.pageyMove - this.tonchInfo.pageyStart) / 18 | 0);
                 moveIndex = moveIndex < 0 ? 0 : moveIndex; // 获取索引<=0时
-                moveIndex = moveIndex > this.data.length ? this.data.length - 1 : moveIndex; // 获取索引》=data长度时
+                moveIndex = moveIndex > this.singerInfo.length ? this.singerInfo.length - 1 : moveIndex; // 获取索引》=singerInfo长度时
                 this._scrollTo(moveIndex);
             },
+            // better-scroll获取列表滚动的Y值
+            scrollClick (res) {
+                this.scrollPageY = res.y;
+            },
+            // 获取每个title距离顶部的高度
+            _getHeightList () {
+                let listviewList = this.$refs.listviewList;
+                let height = 0;
+                this.heightList = [0];
+                listviewList.forEach((item, index) => {
+                    height += item.clientHeight;
+                    this.heightList.push(height);
+                });
+            },
+            // 点击或滑动左侧导航时 跳到对应的列表
             _scrollTo (index) {
-                // 滚动到对应列表
+                this.swiperscrollIndex = parseInt(index);
                 this.$refs.listviewScroll.scrollToElement(this.$refs.listviewList[index], 0);
+            }
+        },
+        watch: {
+            singerInfo () {
+                this.$nextTick(() => {
+                    this._getHeightList();
+                });
+            },
+            scrollPageY (newY) {
+                let pageY = -newY;
+                if (pageY <= 0) {
+                    this.swiperscrollIndex = 0;
+                    return;
+                }
+                for (let i = 0; i < this.heightList.length - 1; i++) {
+                    let hei1 = this.heightList[i];
+                    let hei2 = this.heightList[i + 1];
+                    if (pageY >= hei1 && pageY < hei2) {
+                        this.swiperscrollIndex = i;
+                        this.scrollDiffY = hei2 - pageY;
+                        return;
+                    }
+                }
+                this.swiperscrollIndex = this.heightList.length - 2;
+            },
+            scrollDiffY (newDiff) {
+                let transformDiff = (newDiff > 0 && newDiff < 30) ? newDiff - 30 : 0, transformDiff2;
+                if (transformDiff2 === transformDiff) {
+                    return;
+                }
+                transformDiff2 = transformDiff;
+                this.$nextTick(() => {
+                    this.$refs.listFixed.style.transform = `translate3d(0, ${transformDiff}px, 0)`;
+                });
             }
         },
         components: {

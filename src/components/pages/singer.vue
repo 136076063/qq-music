@@ -1,6 +1,6 @@
 <template>
     <div class="singer">
-        <ListView :data="singerInfo"></ListView>
+        <ListView :singerInfo="singerInfo"></ListView>
     </div>
 </template>
 <script>
@@ -26,8 +26,8 @@
                         channel: 'singer',
                         page: 'list',
                         key: 'all_all_all',
-                        pagesize: 200,
-                        pagenum: 2,
+                        pagesize: 100,
+                        pagenum: 1,
                         hostUin: 0,
                         needNewCode: 0,
                         platform: 'yqq',
