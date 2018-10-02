@@ -92,7 +92,6 @@
                 arr.sort((a, b) => {
                     return a.title.charCodeAt(0) - b.title.charCodeAt(0);
                 });
-                console.error(hot.concat(arr));
                 return hot.concat(arr);
             }
         },

@@ -1,7 +1,7 @@
 <template>
-    <scroll class="listview" :data="data">
+    <scroll class="listview" :data="data" ref="listviewScroll">
         <div>
-            <div class="list-group" v-for="(items, index) in data" :key="index">
+            <div class="list-group" v-for="(items, index) in data" :key="index" ref="listviewList">
                 <div class="list-group-title">{{items.title}}</div>
                 <div class="list-group-item" v-for="(sunItem, subIndex) in items.lists" :key="subIndex">
                     <img class="avatar" v-lazy="sunItem.picUrl" />
@@ -9,8 +9,8 @@
                 </div>
             </div>
         </div>
-        <div class="list-shortcut">
-            <div class="item" v-for="(item, index) in data" :key="index">{{index === 0 ? item.title.substr(0, 1) : item.title}}</div>
+        <div class="list-shortcut" @touchstart.stop.prevent="touchstart" @touchmove.stop.prevent="touchmove">
+            <div class="item" v-for="(item, index) in data" :data-index="index" :key="index">{{index === 0 ? item.title.substr(0, 1) : item.title}}</div>
         </div>
     </scroll>
 </template>
@@ -18,10 +18,37 @@
 <script>
     import scroll from 'base/scroll';
     export default {
+        data () {
+            return {
+                tonchInfo: {}
+            };
+        },
         props: {
             data: {
                 type: Array,
                 default: []
+            }
+        },
+        methods: {
+            touchstart (e) {
+                let Event = e.srcElement ? e.srcElement : e.target, // 获取触发事件的元素
+                    focuIndex = Event.dataset.index ? Event.dataset.index : 0; // 获取触发事件的索引
+                this.tonchInfo.pageyStart = e.touches[0].pageY; // 获取触发事件的pageY
+                this.tonchInfo.focuIndex = focuIndex;
+                this._scrollTo(focuIndex);
+            },
+            touchmove (e) {
+                // 获取移动的pageY
+                this.tonchInfo.pageyMove = e.touches[0].pageY;
+                // 取得移动了几个索引 然后加上初始索引
+                let moveIndex = parseInt(this.tonchInfo.focuIndex) + ((this.tonchInfo.pageyMove - this.tonchInfo.pageyStart) / 18 | 0);
+                moveIndex = moveIndex < 0 ? 0 : moveIndex; // 获取索引<=0时
+                moveIndex = moveIndex > this.data.length ? this.data.length - 1 : moveIndex; // 获取索引》=data长度时
+                this._scrollTo(moveIndex);
+            },
+            _scrollTo (index) {
+                // 滚动到对应列表
+                this.$refs.listviewScroll.scrollToElement(this.$refs.listviewList[index], 0);
             }
         },
         components: {
