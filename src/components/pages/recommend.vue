@@ -39,9 +39,7 @@
             // banner数据
             this.createdGetRecommend();
             // 歌单list
-            setTimeout(() => {
-                this.createdRecommendList();
-            }, 2000000);
+            this.createdRecommendList();
         },
         computed: {
             sliderData () {
