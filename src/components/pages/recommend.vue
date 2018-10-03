@@ -16,10 +16,8 @@
                     </ul>
                 </div>
             </div>
-            <div class="loading-container" v-if="!ListData.length">
-                <loading></loading>
-            </div>
         </Scroll>
+        <loading v-if="!ListData.length"></loading>
     </div>
 </template>
 
@@ -41,7 +39,9 @@
             // banner数据
             this.createdGetRecommend();
             // 歌单list
-            this.createdRecommendList();
+            setTimeout(() => {
+                this.createdRecommendList();
+            }, 2000000);
         },
         computed: {
             sliderData () {

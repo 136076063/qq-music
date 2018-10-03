@@ -21,9 +21,7 @@
         <div class="list-fixed" v-if="fixedTitle" ref="listFixed">
             <div class="fixed-title">{{fixedTitle.title}}</div>
         </div>
-        <div class="loading-container" v-if="!singerInfo.length">
-            <loading></loading>
-        </div>
+        <loading v-if="!singerInfo.length"></loading>
     </scroll>
 </template>
 
