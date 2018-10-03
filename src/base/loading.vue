@@ -34,12 +34,11 @@
     height: 100%
     background-color: #1b1b1b
     position: fixed
-    top: 88px
+    top: 0
     right: 0
     .loading
         position: relative
         top: 30%
-        margin-top: -30px
         .title
             font-size: 8px
             color: #c2c2c2
