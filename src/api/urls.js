@@ -10,9 +10,13 @@ export const RecommendList = 'https://c.y.qq.com/mv/fcgi-bin/getmv_by_tag';
 // 歌手列表
 export const singerUrl = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg';
 
+// 歌手详情
+export const singerDetUrl = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg';
+
 export default {
     getRecommend,
     ERR_OK,
     RecommendList,
-    singerUrl
+    singerUrl,
+    singerDetUrl
 };

@@ -6,14 +6,44 @@
 </template>
 <script>
     import { mapGetters } from 'vuex';
+    import { getJsonp } from 'api/getData';
+    import { singerDetUrl } from 'api/urls';
     export default {
         created () {
-            console.error(this.singer);
+            this.getSingerDetInfo();
         },
         computed: {
             ...mapGetters([
                 'singer'
             ])
+        },
+        methods: {
+            getSingerDetInfo () {
+                getJsonp({
+                    url: singerDetUrl,
+                    ops: {
+                        g_tk: 124852753,
+                        loginUin: 136076063,
+                        hostUin: 0,
+                        format: 'jsonp',
+                        inCharset: 'utf8',
+                        outCharset: 'utf-8',
+                        notice: 0,
+                        platform: 'yqq',
+                        needNewCode: 0,
+                        singermid: '002J4UUk29y8BY',
+                        order: 'listen',
+                        begin: 0,
+                        num: 88,
+                        songstatus: 1
+                    },
+                    opts: {
+                        param: 'jsonpCallback'
+                    }
+                }).then((res) => {
+                    console.error(res);
+                });
+            }
         }
     };
 </script>
