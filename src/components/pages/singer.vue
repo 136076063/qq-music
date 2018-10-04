@@ -5,6 +5,7 @@
     </div>
 </template>
 <script>
+    import { mapMutations } from 'vuex';
     import { getJsonp } from 'api/getData';
     import urls from 'api/urls';
     import Singer from 'common/js/singer';
@@ -23,8 +24,11 @@
                 this.$router.push({
                     path: `/singer/${item.UserId}`
                 });
-                console.error('a');
+                this.setSinger(item);
             },
+            ...mapMutations({
+                setSinger: 'SINGER_INFO'
+            }),
             // 获取歌手信息
             getSingerData () {
                 getJsonp({

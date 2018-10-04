@@ -4,7 +4,19 @@
       </div>
     </transition>
 </template>
-
+<script>
+    import { mapGetters } from 'vuex';
+    export default {
+        created () {
+            console.error(this.singer);
+        },
+        computed: {
+            ...mapGetters([
+                'singer'
+            ])
+        }
+    };
+</script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
     .singer-detail
         position:fixed
