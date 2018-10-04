@@ -1,6 +1,7 @@
 <template>
     <div class="singer">
-        <ListView :singerInfo="singerInfo"></ListView>
+        <ListView @toSingerDetail="toSingerDetail" :singerInfo="singerInfo"></ListView>
+        <router-view></router-view>
     </div>
 </template>
 <script>
@@ -18,6 +19,12 @@
             this.getSingerData();
         },
         methods: {
+            toSingerDetail (item) {
+                this.$router.push({
+                    path: `/singer/${item.UserId}`
+                });
+                console.error('a');
+            },
             // 获取歌手信息
             getSingerData () {
                 getJsonp({

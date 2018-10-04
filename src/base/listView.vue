@@ -9,7 +9,7 @@
         <div>
             <div class="list-group" v-for="(items, index) in singerInfo" :key="index" ref="listviewList">
                 <div class="list-group-title">{{items.title}}</div>
-                <div class="list-group-item" v-for="(sunItem, subIndex) in items.lists" :key="subIndex">
+                <div @click="toSingerDetail(sunItem)" class="list-group-item" v-for="(sunItem, subIndex) in items.lists" :key="subIndex">
                     <img class="avatar" v-lazy="sunItem.picUrl" />
                     <div class="name">{{sunItem.userName}}</div>
                 </div>
@@ -57,6 +57,10 @@
             }
         },
         methods: {
+            // 歌手详情派发事件
+            toSingerDetail (item) {
+                this.$emit('toSingerDetail', item);
+            },
             touchstart (e) {
                 let Event = e.srcElement ? e.srcElement : e.target, // 获取触发事件的元素
                     focuIndex = Event.dataset.index ? Event.dataset.index : 0; // 获取触发事件的索引
