@@ -38,7 +38,7 @@
     right: 0
     .loading
         position: relative
-        top: 30%
+        top: 40%
         .title
             font-size: 8px
             color: #c2c2c2
