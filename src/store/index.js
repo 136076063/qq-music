@@ -16,7 +16,7 @@ const actions = {
 
 const getters = {
     // 歌手详情数据 => 歌手列表带到歌手详情
-    singer (state) {
+    singerInfo (state) {
         return state.singerInfo;
     }
 };

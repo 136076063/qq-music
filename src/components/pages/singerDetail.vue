@@ -7,18 +7,30 @@
 <script>
     import { mapGetters } from 'vuex';
     import { getJsonp } from 'api/getData';
-    import { singerDetUrl } from 'api/urls';
+    import { singerDetUrl, ERR_OK } from 'api/urls';
+    import SingerDetail from 'common/js/singerDetail.js';
     export default {
+        data () {
+            return {
+                singerDetailInfo: []
+            };
+        },
         created () {
             this.getSingerDetInfo();
         },
         computed: {
             ...mapGetters([
-                'singer'
+                'singerInfo'
             ])
         },
         methods: {
             getSingerDetInfo () {
+                if (!this.singerInfo.UserId) {
+                    this.$router.push({
+                        path: '/singer'
+                    });
+                    return;
+                }
                 getJsonp({
                     url: singerDetUrl,
                     ops: {
@@ -31,7 +43,7 @@
                         notice: 0,
                         platform: 'yqq',
                         needNewCode: 0,
-                        singermid: '002J4UUk29y8BY',
+                        singermid: this.singerInfo.UserId,
                         order: 'listen',
                         begin: 0,
                         num: 88,
@@ -41,8 +53,19 @@
                         param: 'jsonpCallback'
                     }
                 }).then((res) => {
-                    console.error(res);
+                    if (res && res.code === ERR_OK) {
+                        this.singerDetailInfo = this._initInfo((res && res.data && res.data.list) || []);
+                    } else {
+                        console.error(res.message);
+                    }
                 });
+            },
+            _initInfo (items) {
+                let arr = [];
+                items.forEach((item) => {
+                    arr.push(new SingerDetail(item.musicData));
+                });
+                return arr;
             }
         }
     };
