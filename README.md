@@ -1,4 +1,4 @@
-app-music a
+app-music
 ├─.DS_Store
 ├─.babelrc
 ├─.editorconfig
