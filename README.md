@@ -1,3 +1,8 @@
+### 音乐APP
+
+#### 结构
+
+```
 app-music
 ├─.DS_Store
 ├─.babelrc
@@ -80,3 +85,4 @@ app-music
 |   |         └Project_Default.xml
 |   ├─dictionaries
 |   |      └yize.xml
+```
